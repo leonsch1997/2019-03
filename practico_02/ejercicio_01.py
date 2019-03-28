@@ -14,4 +14,4 @@ class Rectangulo:
 
 
 rec1=Rectangulo(8,5)
-print(rec1.area())
+assert(rec1.area()==40)
