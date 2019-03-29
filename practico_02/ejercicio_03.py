@@ -40,5 +40,5 @@ class Persona:
 perso=Persona("Marcela",48,'M',65,185)
 print(perso.es_mayor_edad())
 assert(perso.es_mayor_edad()==True)
-dnigene=perso.print_data()[3]
-assert(perso.print_data()==["Marcela",48,'M',dnigene,65,185])
+datos_per=perso.print_data()
+assert(datos_per==["Marcela",48,'M',datos_per[3],65,185])
