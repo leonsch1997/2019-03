@@ -4,7 +4,14 @@
 class Rectangulo:
 
     def __init__(self, base, altura):
-        pass
+        self.b=base
+        self.h=altura
 
     def area(self):
-        pass
+        area=(self.b)*(self.h)
+        return area
+
+
+
+rec1=Rectangulo(8,5)
+assert(rec1.area()==40)
