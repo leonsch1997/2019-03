@@ -9,8 +9,7 @@
 # - edad_ingreso(): indica que edad tenia al ingresar a la carrera (basándose en el año actual).
 
 from datetime import datetime
-from practico_02.ejercicio_03.py import Persona
-
+from TP2_practica_03 import Persona
 
 class Estudiante(Persona):
 
@@ -30,14 +29,12 @@ class Estudiante(Persona):
     # implementar usando modulo datetime
     def edad_ingreso(self):
         dt=datetime.now()
-        edad_actual=int(input("ingrese edad actual: "))
-        año_ing=(dt.year - (self.a))
-        edad_ing=(edad_actual-self.a)
-        return[año_ing,edad_ing]
+        edad_ing= self.e - (dt.year - self.a)
+        return edad_ing
 
-estu=Estudiante("Ingenieria en Sistemas de Información",4,42,21)
+estu=Estudiante("Mauro",28,'H',85,185,"Ingenieria en Sistemas de Información",2015,42,21)
 print("tiene un ",estu.avance(),"% de la carrera aprobada")
 assert (estu.avance()==50)
 edad_año=estu.edad_ingreso()
-print("ingreso en el año: ",edad_año[0]," con ",edad_año[1]," años")
-assert(edad_año==[edad_año[0],edad_año[1]])
+print("ingreso  con ",edad_año," años")
+assert(edad_año==24)
