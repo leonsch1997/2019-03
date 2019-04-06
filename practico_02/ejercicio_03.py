@@ -37,8 +37,8 @@ class Persona:
         print(self.n,self.e,self.s,self.dni,self.p,self.a)
         return[self.n,self.e,self.s,self.dni,self.p,self.a]
 
-perso=Persona("Marcela",48,'M',65,185)
+perso=Persona("Mauro",28,'H',85,185)
 print(perso.es_mayor_edad())
 assert(perso.es_mayor_edad()==True)
 datos_per=perso.print_data()
-assert(datos_per==["Marcela",48,'M',datos_per[3],65,185])
+assert(datos_per==["Mauro",28,'H',datos_per[3],85,185])
