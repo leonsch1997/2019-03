@@ -9,10 +9,17 @@
 # - edad_ingreso(): indica que edad tenia al ingresar a la carrera (basándose en el año actual).
 
 
-class Estudiante:
+from practico_02.ejercicio_03 import Persona
+
+
+class Estudiante(Persona):
 
     def __init__(self, carrera, anio, cantidad_materias, cantidad_aprobadas):
-        pass
+        super.
+        self.c=carrera
+        self.a=anio
+        self.cm=cantidad_materias
+        self.ca=cantidad_aprobadas
 
     def avance(self):
         pass
