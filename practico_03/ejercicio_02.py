@@ -3,16 +3,13 @@
 
 import datetime
 
-from practica_03.ejercicio_01 import reset_tabla
+from practico_03.ejercicio_01 import reset_tabla,crear_conexion,crea_cursor
 
-import sqlite3
-
-db = sqlite3.connect(':memory:')
-
-cursor = db.cursor()
+db=crear_conexion()
+cursor= crea_cursor()
 
 def agregar_persona(nombre, nacimiento, dni, altura):
-    SQL='INSERT into Persona (nombre, nacimiento, dni, altura) VALUES=(?,?,?,?)'
+    SQL='INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES=(?,?,?,?)'
     datos=(nombre,nacimiento,dni,altura)
     cursor.execute(SQL, datos)
     IdPersona = cursor.lastrowid
@@ -28,6 +25,3 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
-
-db.close()
-
