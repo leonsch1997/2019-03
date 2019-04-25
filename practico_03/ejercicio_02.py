@@ -3,17 +3,21 @@
 
 import datetime
 
-from practico_03.ejercicio_01 import reset_tabla,crear_conexion,crea_cursor
+from practica_03ejercicio_01 import reset_tabla, crear_conexion
 
 db=crear_conexion()
-cursor= crea_cursor()
+
 
 def agregar_persona(nombre, nacimiento, dni, altura):
-    SQL='INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES=(?,?,?,?)'
+    SQL='INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
     datos=(nombre,nacimiento,dni,altura)
-    cursor.execute(SQL, datos)
-    IdPersona = cursor.lastrowid
-    db.commit()
+
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        cursor.execute(SQL, datos)
+        IdPersona = cursor.lastrowid
+        db.commit()
+
     return IdPersona
 
 @reset_tabla
@@ -25,3 +29,4 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
+
