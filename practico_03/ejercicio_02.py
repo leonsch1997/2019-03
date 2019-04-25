@@ -5,8 +5,6 @@ import datetime
 
 from practica_03ejercicio_01 import reset_tabla, crear_conexion
 
-db=crear_conexion()
-
 
 def agregar_persona(nombre, nacimiento, dni, altura):
     SQL='INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
