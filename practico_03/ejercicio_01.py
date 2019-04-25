@@ -7,34 +7,36 @@
 
 # Implementar la funcion borrar_tabla, que borra la tabla creada anteriormente.
 import sqlite3
+
 def crear_conexion():
-    database = sqlite3.connect(':memory:')
-    return database
-
-db=crear_conexion()
-
-def crea_cursor():
-    cur=db.cursor()
-    return cur
-
-cursor= crea_cursor()
+    return sqlite3.connect('base.db')
 
 def crear_tabla():
-    cSQL = 'CREATE TABLE IF NOT EXISTS Persona(IdPersona INTEGER PRIMARY KEY ASC, Nombre TEXT(25), FechaNacimiento DATE(),' \
-           'Dni INT(), Altura INT())'
-    cursor.execute(cSQL)
-    db.commit()
+
+    cSQL = """
+      CREATE TABLE IF NOT EXISTS 
+      Persona(
+          IdPersona INTEGER PRIMARY KEY,
+          Nombre TEXT(25),
+          FechaNacimiento TEXT,
+          Dni INTEGER,
+          Altura INTEGER
+        )
+    """
+
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        cursor.execute(cSQL)
+        db.commit()
+
 
 def borrar_tabla():
     cSQL = 'DROP TABLE IF EXISTS Persona'
-    cursor.execute(cSQL)
-    db.commit()
 
-def cerrar_conexion():
-    cursor.close()
-    db.close()
-
-
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        cursor.execute(cSQL)
+        db.commit()
 
 # no modificar
 def reset_tabla(func):
@@ -43,5 +45,4 @@ def reset_tabla(func):
         func()
         borrar_tabla()
     return func_wrapper
-
 
