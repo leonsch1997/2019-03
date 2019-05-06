@@ -3,16 +3,16 @@
 
 import datetime
 
-from practica_03ejercicio_01 import reset_tabla, crear_conexion
+from practico_03.ejercicio_01 import reset_tabla, crear_conexion
 
 
 def agregar_persona(nombre, nacimiento, dni, altura):
-    SQL='INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
-    datos=(nombre,nacimiento,dni,altura)
+    cSQL = 'INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
+    datos = (nombre,nacimiento,dni,altura)
 
     with crear_conexion() as db:
         cursor = db.cursor()
-        cursor.execute(SQL, datos)
+        cursor.execute(cSQL, datos)
         IdPersona = cursor.lastrowid
         db.commit()
 
