@@ -26,4 +26,3 @@ for fila in cursor:
 db.close()
 
 
-

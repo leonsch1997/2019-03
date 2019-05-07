@@ -18,7 +18,7 @@ def crear_tabla():
       Persona(
           IdPersona INTEGER PRIMARY KEY,
           Nombre TEXT(25),
-          FechaNacimiento DATE,
+          FechaNacimiento TEXT,
           Dni INTEGER,
           Altura INTEGER
         )

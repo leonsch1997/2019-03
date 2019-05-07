@@ -16,7 +16,7 @@ from practico_03.ejercicio_06 import reset_tabla
 
 def fecha_ultimo_peso(id_persona):
 
-    cSQL = """SELECT Max(PersonaPeso.fecha)
+    cSQL = """SELECT MAX(PersonaPeso.fecha)
               FROM Persona
               JOIN PersonaPeso
               ON PersonaPeso.idPersona = Persona.idPersona
@@ -25,12 +25,11 @@ def fecha_ultimo_peso(id_persona):
 
     with crear_conexion() as db:
         cursor = db.cursor()
-        ultima_fecha = cursor.execute(cSQL, datos)
+        ultima_fecha = cursor.execute(cSQL, datos).fetchone()[0]
 
         if ultima_fecha is None:
             return None
         else:
-            ultima_fecha = datetime.datetime.strptime(ultima_fecha, '%Y-%m-%d')
             return ultima_fecha
 
 
@@ -46,7 +45,8 @@ def agregar_peso(id_persona, fecha, peso):
 
         if exists is False:
             return False
-        elif not(ultima_fecha is None) and fecha < ultima_fecha:
+        elif not(ultima_fecha is None) \
+        and fecha < datetime.datetime.strptime(ultima_fecha, '%Y-%m-%d %H:%M:%S'):
             return False
         else:
             cursor.execute(cSQL, datos)
@@ -65,3 +65,4 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
+

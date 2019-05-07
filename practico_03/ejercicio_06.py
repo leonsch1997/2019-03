@@ -13,7 +13,7 @@ def crear_tabla_peso():
                PersonaPeso(
                idPeso INTEGER PRIMARY KEY, 
                idPersona INTEGER ,
-               fecha DATE ,
+               fecha TEXT ,
                peso INTEGER, 
                FOREIGN KEY (idPersona) REFERENCES Persona(idPersona)
                ) """

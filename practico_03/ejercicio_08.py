@@ -24,21 +24,19 @@ from practico_03.ejercicio_07 import agregar_peso
 
 def listar_pesos(id_persona):
     exists = buscar_persona(id_persona)
-    cSQL = """SELECT fecha, peso 
+    cSQL = """SELECT SUBSTR(fecha, 1,10), peso 
                FROM PersonaPeso 
                WHERE idPersona = ?"""
     datos = (id_persona,)
-    lista = []
 
     with crear_conexion() as db:
         cursor = db.cursor()
         if exists:
-            pesos = cursor.execute(cSQL, datos)
+            pesos = cursor.execute(cSQL, datos).fetchall()
             if pesos is None:
                 return False
             else:
-                for row in pesos:
-                    lista[row].append(row)
+                return pesos
         else:
             return False
 
