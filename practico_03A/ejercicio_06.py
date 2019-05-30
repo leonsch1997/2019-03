@@ -9,13 +9,13 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, create_eng
 from sqlalchemy.orm import sessionmaker, relationship
 from practico_03A.ejercicio_01 import reset_tabla, Persona, engine, crear_session, crear_tabla, borrar_tabla, base
 
-class PersonaPeso(base):
-    __tablename__ = 'PersonaPeso'
-    id_peso = Column(Integer, primary_key=True)
-    id_persona = Column(Integer, ForeignKey('Persona.id_persona'))
-    fecha_peso = Column(DateTime, nullable=False)
-    peso = Column(Integer, nullable=False)
-    back_persona = relationship(Persona)
+# class PersonaPeso(base):
+#     __tablename__ = 'PersonaPeso'
+#     id_peso = Column(Integer, primary_key=True)
+#     id_persona = Column(Integer, ForeignKey('Persona.id_persona'))
+#     fecha_peso = Column(DateTime, nullable=False)
+#     peso = Column(Integer, nullable=False)
+#     to_persona = relationship(Persona, back_populates="to_personapeso")
 
 def crear_tabla_peso():
     crear_tabla(PersonaPeso)
