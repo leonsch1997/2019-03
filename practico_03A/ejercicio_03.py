@@ -3,12 +3,21 @@
 
 import datetime
 
-from practico_03.ejercicio_01 import reset_tabla
-from practico_03.ejercicio_02 import agregar_persona
+from practico_03A.ejercicio_01 import reset_tabla, Persona, engine, crear_session
+from practico_03A.ejercicio_02 import agregar_persona
 
 
 def borrar_persona(id_persona):
-    return False
+    session = crear_session()
+    persona_buscada = session.query(Persona).get(id_persona)
+    if persona_buscada is None:
+        print("Persona no encontrada")
+        return False
+    else:
+        session.delete(persona_buscada)
+        session.commit()
+        print("Persona borrada: ID", persona_buscada.id_persona, " ", persona_buscada.nombre)
+    return True
 
 
 @reset_tabla

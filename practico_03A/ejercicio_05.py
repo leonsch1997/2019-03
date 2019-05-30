@@ -3,13 +3,23 @@
 
 import datetime
 
-from practico_03.ejercicio_01 import reset_tabla
-from practico_03.ejercicio_02 import agregar_persona
-from practico_03.ejercicio_04 import buscar_persona
+from practico_03A.ejercicio_01 import reset_tabla, Persona, engine, crear_session
+from practico_03A.ejercicio_02 import agregar_persona
+from practico_03A.ejercicio_04 import buscar_persona
 
 
-def actualizar_persona(id_persona, nombre, nacimiento, dni, altura):
-    return False
+def actualizar_persona(id_persona, nombre, fecha_nacimiento, dni, altura):
+    session = crear_session()
+    persona_buscada = session.query(Persona).get(id_persona)
+    if persona_buscada is None:
+        return False
+    else:
+        persona_buscada.nombre = nombre
+        persona_buscada.dni = dni
+        persona_buscada.fecha_nacimiento = fecha_nacimiento
+        persona_buscada.altura = altura
+        session.commit()
+        return True
 
 
 @reset_tabla

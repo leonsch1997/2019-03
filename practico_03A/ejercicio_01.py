@@ -28,6 +28,7 @@ def crear_session():
     db_session = sessionmaker()
     db_session.bind = engine
     session = db_session()
+    return session
 
 
 def crear_tabla(nombre_clase_tabla):
