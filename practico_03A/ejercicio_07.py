@@ -43,15 +43,15 @@ def agregar_peso(id_persona, fecha_peso, peso):
         return nuevo_peso.id_peso
 
 
-# @reset_tabla
-# def pruebas():
-#     id_juan = agregar_persona('juan perez', datetime.datetime(1988, 5, 15), 32165498, 180)
-#     assert agregar_peso(id_juan, datetime.datetime(2018, 5, 26), 80) > 0
-#     # id incorrecto
-#     assert agregar_peso(200, datetime.datetime(1988, 5, 15), 80) == False
-#     # registro previo al 2018-05-26
-#     assert agregar_peso(id_juan, datetime.datetime(2018, 5, 16), 80) == False
+@reset_tabla
+def pruebas():
+    id_juan = agregar_persona('juan perez', datetime.datetime(1988, 5, 15), 32165498, 180)
+    assert agregar_peso(id_juan, datetime.datetime(2018, 5, 26), 80) > 0
+    # id incorrecto
+    assert agregar_peso(200, datetime.datetime(1988, 5, 15), 80) == False
+    # registro previo al 2018-05-26
+    assert agregar_peso(id_juan, datetime.datetime(2018, 5, 16), 80) == False
 
 if __name__ == '__main__':
-    # pruebas()
-    print(fecha_ultimo_peso(1))
+    pruebas()
+
