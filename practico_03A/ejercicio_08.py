@@ -16,13 +16,28 @@
 
 import datetime
 
-from practico_03.ejercicio_02 import agregar_persona
-from practico_03.ejercicio_06 import reset_tabla
-from practico_03.ejercicio_07 import agregar_peso
+from practico_03A.ejercicio_01 import reset_tabla, Persona, engine, crear_session, crear_tabla, borrar_tabla, base
+from practico_03A.ejercicio_06 import PersonaPeso
+from practico_03A.ejercicio_02 import agregar_persona
+from practico_03A.ejercicio_04 import buscar_persona
 
 
 def listar_pesos(id_persona):
-    return []
+    persona_buscada = buscar_persona(id_persona)
+    if persona_buscada is not False:
+        session = crear_session()
+        pesos = session.query(PersonaPeso).filter(PersonaPeso.idPer == id_persona).all()
+        if len(pesos) == 0:
+            print("La persona no registra pesos")
+            return False
+        else:
+            pesos_lista = []
+            i = 1
+            for peso in pesos:
+                pesos_lista.append((peso.fecha_peso, peso.peso))
+            return pesos_lista
+    else:
+        return False
 
 
 @reset_tabla
