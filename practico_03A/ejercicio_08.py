@@ -25,21 +25,21 @@ from practico_03A.ejercicio_07 import agregar_peso
 
 def listar_pesos(id_persona):
     persona_buscada = buscar_persona(id_persona)
+
     if persona_buscada is not False:
         session = crear_session()
         pesos = session.query(PersonaPeso).filter(PersonaPeso.id_persona == id_persona).all()
-        if len(pesos) == 0:
-            print("La persona no registra pesos")
+
+        if pesos == []:
+            print("La persona con ID ", id_persona, "no registra pesos")
             return False
         else:
-            pesos_lista = []
-            i = 1
-            for peso in pesos:
-                pesos_lista.append((peso.fecha_peso, peso.peso))
-            print(pesos_lista)
-            return pesos_lista
-    else:
-        return False
+            lista_pesos = []
+            for p in pesos:
+                lista_pesos.append((str(p.fecha_peso)[0:10], p.peso))
+            return lista_pesos
+
+    return False
 
 
 @reset_tabla
@@ -55,6 +55,8 @@ def pruebas():
     assert pesos_juan == pesos_esperados
     # id incorrecto
     assert listar_pesos(200) == False
+    id_marcela = agregar_persona('marcela gonzalez', datetime.datetime(1980, 1, 25), 12164492, 195)
+    listar_pesos(id_marcela)
 
 
 if __name__ == '__main__':
