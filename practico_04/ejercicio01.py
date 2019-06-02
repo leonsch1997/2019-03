@@ -15,35 +15,47 @@ class CreaFrame(tk.Frame):
         res=float
         self.lblTitulo = tk.Label(self, text=titulo)
         self.lblTitulo.pack()
+        self.num1Label= tk.Label(self,text='Primero numero')
+        self.num1Label.pack(side="top")
         self.n1=tk.Entry(self,textvariable=v1)
-        self.n2=tk.Entry(self,textvariable=v2)
         self.n1.pack(side="top")
-        self.n2.pack(side="left")
+        self.num2Label= tk.Label(self,text='Segundo numero')
+        self.num2Label.pack(side="top")
+        self.n2=tk.Entry(self,textvariable=v2)
+        self.n2.pack(side="top")
         self.btn_suma = tk.Button(self,text='+',command=self.suma) #--- el padre es un frame
-        self.btn_suma.pack(side="right")
+        self.btn_suma.pack(side="left")
         self.btn_resta = tk.Button(self,text='-',command=self.resta)
-        self.btn_resta.pack(side="right")
+        self.btn_resta.pack(side="left")
         self.btn_multiplica = tk.Button(self,text='x',command=self.multiplica)
-        self.btn_multiplica.pack(side="right")
+        self.btn_multiplica.pack(side="left")
         self.btn_divide = tk.Button(self,text='/',command=self.divide)
-        self.btn_divide.pack(side="right")
-        self.btn_salir = tk.Button(self, text="QUIT", fg="red",command=self.padre.destroy) #--- se cierra el form padre
-        self.btn_salir.pack(side="bottom")
-
+        self.btn_divide.pack(side="left")
     def suma(self):
-        res=(float(self.n1.get())+float(self.n2.get()))
-        print(res)
+        try:
+            res=(float(self.n1.get())+float(self.n2.get()))
+            print (res)
+        except:
+            ValueError(print("ERROR! no se ingreso alguno de los valores!"))
     def resta(self):
-        res=(float(self.n1.get())-float(self.n2.get()))
-        print(res)
+        try:
+            res=(float(self.n1.get())-float(self.n2.get()))
+            print (res)
+        except:
+            ValueError(print("ERROR! no se ingreso alguno de los valores!"))
     def multiplica(self):
-        res=(float(self.n1.get())*float(self.n2.get()))
-        print(res)
+        try:
+            res=(float(self.n1.get())*float(self.n2.get()))
+            print (res)
+        except:
+            ValueError(print("ERROR! no se ingreso alguno de los valores!"))
     def divide(self):
-        res=(float(self.n1.get())/float(self.n2.get()))
-        print(res)
+        try:
+            res=(float(self.n1.get())/float(self.n2.get()))
+            print (res)
+        except:
+            ValueError(print("ERROR! no se ingreso alguno de los valores!"))
 if __name__ == '__main__':
     form1 = tk.Tk()
-    app = CreaFrame(padre=form1, titulo='Calculadora')   
+    app = CreaFrame(padre=form1, titulo='Calculadora')
     form1.mainloop()
-
