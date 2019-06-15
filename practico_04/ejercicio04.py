@@ -15,6 +15,11 @@ class CreaFrame(tk.Frame):
         self.agregar_ciudades()
 
     def agregar_ciudades(self):
+        self.ciu= tk.StringVar()
+        self.cod= tk.StringVar()
+        self.valorciudad=tk.StringVar()
+        self.valorcodigo=tk.StringVar()
+
         self.treeview = ttk.Treeview(self, columns=("C.P"))
         self.treeview.pack()
         self.treeview.heading("#0",text="Ciudades")
@@ -26,17 +31,41 @@ class CreaFrame(tk.Frame):
         self.treeview.insert("", tk.END,text="Mar del plata",values=("7600"))
 
         self.botonalta=tk.Button(self,text="Alta",command=self.alta)
-        self.botonalta.pack()
+        self.botonalta.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
         """self.botonbaja=tk.Button(self,text="Baja",command=self.baja)
         self.botonbaja.pack()
         self.botonmod=tk.Button(self,text="Modifica",command=self.modifica)
         self.botonmod.pack()"""
 
     def alta(self):
-        ciu=input("ingrese nombre de la ciudad")
-        cod=input("ingrese codigo postal")
-        self.treeview.insert("", tk.END,text=ciu,values=cod)
+        self.abrirventana2()
 
+    def abrirventana2(self):
+        self.padre.deiconify()
+        win=tk.Toplevel()
+        win.geometry('380x300+50+20')
+        win.config(background='light blue')
+        labelciudad=tk.Label(win,text="Ingrese nombre de la ciudad",background='light blue')
+        labelciudad.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
+        win.ciud=tk.Entry(win,justify="center",textvariable=self.ciu)
+        win.ciud.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
+
+        labelcod=tk.Label(win,text="Ingrese codigo postal (CP)",background='light blue')
+        labelcod.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
+        win.codi=tk.Entry(win,justify="center",textvariable=self.cod)
+        win.codi.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
+
+
+        btnAgrega=tk.Button(win,text="Agregar",justify='center',command=self.agregar())
+        btnAgrega.pack(padx=5,pady=5,ipadx=5,ipady=5,fill=tk.X)
+
+    def agregar(self):
+        try:
+            valu1=self.valorciudad.set(str(self.abrirventana2.win.ciud.get()))
+            valu2=self.valorcodigo.set(str(self.abrirventana2.win.codi.get()))
+            self.treeview.insert("", tk.END,text=valu1,values=valu2)
+        except:
+            ValueError(print("ERROR! no se ingreso alguno de los valores!"))
 
 if __name__ == '__main__':
     form1 = tk.Tk()
