@@ -12,6 +12,8 @@
 # - generar_dni(): genera un número aleatorio de 8 cifras y lo guarda dentro del atributo dni.
 
 import random
+
+
 class Persona:
 
     def __init__(self, nombre, edad, sexo, peso, altura):

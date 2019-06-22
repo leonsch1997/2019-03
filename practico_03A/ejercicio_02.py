@@ -3,20 +3,20 @@
 
 import datetime
 
-from practico_03.ejercicio_01 import reset_tabla, crear_conexion
+from practico_03A.ejercicio_01 import reset_tabla, Persona, engine, crear_session
 
 
-def agregar_persona(nombre, nacimiento, dni, altura):
-    cSQL = 'INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
-    datos = (nombre,nacimiento,dni,altura)
+def agregar_persona(nombre, fecha_nacimiento, dni, altura):
+    nueva_persona = Persona()
+    nueva_persona.nombre = nombre
+    nueva_persona.fecha_nacimiento=fecha_nacimiento
+    nueva_persona.dni=dni
+    nueva_persona.altura=altura
+    session = crear_session()
+    session.add(nueva_persona)
+    session.commit()
+    return nueva_persona.id_persona
 
-    with crear_conexion() as db:
-        cursor = db.cursor()
-        cursor.execute(cSQL, datos)
-        IdPersona = cursor.lastrowid
-        db.commit()
-
-    return IdPersona
 
 @reset_tabla
 def pruebas():
@@ -25,6 +25,6 @@ def pruebas():
     assert id_juan > 0
     assert id_marcela > id_juan
 
+
 if __name__ == '__main__':
     pruebas()
-

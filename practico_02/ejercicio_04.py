@@ -9,7 +9,7 @@
 # - edad_ingreso(): indica que edad tenia al ingresar a la carrera (basándose en el año actual).
 
 from datetime import datetime
-from practico_02.ejercicio_03.py import Persona
+from practico_02.ejercicio_03 import Persona
 
 class Estudiante(Persona):
 

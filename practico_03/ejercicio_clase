@@ -1,0 +1,28 @@
+import sqlite3
+
+db = sqlite3.connect(':memory:')
+
+cursor = db.cursor()
+
+cSQL = 'CREATE TABLE IF NOT EXISTS ventas(id INTEGER PRIMARY KEY ASC, descrip TEXT(25), cant REAL(15,2))'
+
+cursor.execute(cSQL)
+
+db.commit()
+
+
+cSQL = "INSERT into ventas (descrip,cant) VALUES (?,?)"
+tdatos = ('queso', 12.5)
+cursor.execute(cSQL, tdatos)
+id = cursor.lastrowid
+db.commit()
+
+
+cursor.execute("SELECT id, descrip, cant FROM ventas")
+for fila in cursor:
+    print('{0} : {1}, {2}'.format(fila[0], fila[1], fila[2]))
+
+
+db.close()
+
+

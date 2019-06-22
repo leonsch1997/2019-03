@@ -2,6 +2,7 @@
 ## Ciudades Argentinas y su código postal ( por lo menos 5 ciudades ) .
 import tkinter as tk
 from tkinter import ttk
+
 class CreaFrame(tk.Frame):
     def __init__(self, padre=None, titulo =''): #--- recibe un form contenedor ‘padre’
         super().__init__(padre)
@@ -21,6 +22,9 @@ class CreaFrame(tk.Frame):
         self.treeview.insert("", tk.END,text="Buenos Aires",values=("1000"))
         self.treeview.insert("", tk.END,text="Cordoba",values=("5000"))
         self.treeview.insert("", tk.END,text="Mar del plata",values=("7600"))
+
+
+
 if __name__ == '__main__':
     form1 = tk.Tk()
     app = CreaFrame(padre=form1, titulo='Ciudades')

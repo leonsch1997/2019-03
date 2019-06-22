@@ -5,4 +5,6 @@
 def genera_n_caracteres(n,carac):
     res=n*carac
     return res
+
+
 assert (genera_n_caracteres(4,"g")=="gggg")
