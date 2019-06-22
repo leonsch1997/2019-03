@@ -80,15 +80,16 @@ class DatosCiudades(object):
         try:
             ciudad = self.buscar_x_id_ciudad(id_ciudad_baja)
             self.session.delete(ciudad)
+            self.session.commit()
             return True
         except:
             return False
 
-    def modificacion(self, ciudad):
+    def modificacion(self, id_ciudad, cod_postal, nombre_ciudad):
         try:
-            ciudad_modificada = self.buscar_x_id_ciudad(ciudad.id_ciudad)
-            ciudad_modificada.cod_postal = ciudad.cod_postal
-            ciudad_modificada.nombre_ciudad = ciudad.nombre_ciudad
+            ciudad_modificada = self.buscar_x_id_ciudad(id_ciudad)
+            ciudad_modificada.cod_postal = cod_postal
+            ciudad_modificada.nombre_ciudad = nombre_ciudad
             self.session.commit()
             return ciudad_modificada
         except:
@@ -113,7 +114,7 @@ class Ciudades_CodPostales(tk.Frame):
         self.tabla.heading('#1', text='Ciudad', anchor=tk.CENTER)
 
         #Mensaje
-        self.message = tk.Label(self.frame, text='Prueba', fg='red')
+        self.message = tk.Label(self.frame, text='', fg='red')
         self.message.grid(row=6, column=0, columnspan=3, sticky=tk.W+tk.E)
 
         self.mostrar_ciudades()
@@ -123,13 +124,12 @@ class Ciudades_CodPostales(tk.Frame):
                                 command=self.agregar_ciudad
                                 ).grid(row=5, column=0, columnspan=1, sticky=tk.W+tk.E)
         boton_modificar = ttk.Button(self.frame, text='Modificar Ciudad',
-                                     command=self.eliminar_ciudad
+                                     command=self.modificar_ciudad
                                 ).grid(row=5, column=1, columnspan=1, sticky=tk.W+tk.E)
         boton_eliminar = ttk.Button(self.frame, text='Eliminar Ciudad',
-                                    command=self.modificar_ciudad
+                                    command=self.eliminar_ciudad
                                 ).grid(row=5, column=2, columnspan=1, sticky=tk.W+tk.E)
 
-        self.mostrar_ciudades()
 
     def mostrar_ciudades(self):
         # cleaning Table
@@ -144,75 +144,80 @@ class Ciudades_CodPostales(tk.Frame):
             self.tabla.insert('', 0, text=fila[1], values=(fila[2],))
 
     def validar_seleccion(self):
-        # try:
-        #     self.tabla.item(self.tabla.selection())['text'][0]
-        # except IndexError as e:
-        #     self.message['text'] = 'Por favor seleccione una ciudad'
-        seleccion = ('9999', 'Xxx Xxxxx')
+        seleccion = ('', '')
+        try:
+            datos = DatosCiudades()
+            id_seleccion = datos.buscar_x_cod_postal(self.tabla.item(self.tabla.selection())['text'])
+            seleccion = (id_seleccion, self.tabla.item(self.tabla.selection())['text'],
+                         self.tabla.item(self.tabla.selection())['values'][0])
+        except IndexError as e:
+            self.message['text'] = 'Por favor seleccione una ciudad'
         return seleccion
 
     def agregar_ciudad(self):
-        seleccion = ('', '')
+        seleccion = ('', '', '')
         self.ventana_CRUD('Agregar ciudad', seleccion)
 
     def agregar_ciudad2(self, ciudad_agregar):
-        print('agregar', ciudad_agregar)
-        # ciudad = Ciudad()
-        # ciudad.cod_postal = ciudad_agregar[0]
-        # ciudad.nombre_ciudad = ciudad_agregar[1]
-        # datos = DatosCiudades()
-        # if datos.alta(ciudad) != False:
-        #     self.message['text'] = 'La ciudad {} fue agregada'.format(ciudad_agregar[1])
+        ciudad = Ciudad()
+        ciudad.cod_postal = ciudad_agregar[1]
+        ciudad.nombre_ciudad = ciudad_agregar[2]
+        datos = DatosCiudades()
+        if datos.alta(ciudad) != False:
+            self.message['text'] = 'La ciudad {} fue agregada'.format(ciudad_agregar[2])
+        self.mostrar_ciudades()
 
     def eliminar_ciudad(self):
         seleccion = self.validar_seleccion()
-        self.ventana_CRUD('Eliminar ciudad', seleccion)
+        if seleccion != ('', ''):
+            self.ventana_CRUD('Eliminar ciudad', seleccion)
 
     def eliminar_ciudad2(self, ciudad_eliminar):
-        print('eliminar', ciudad_eliminar)
-        # cod_postal_elminar = ciudad_eliminar[0]
-        # datos = DatosCiudades()
-        # id_ciudad_eliminar = datos.buscar_x_id_ciudad(cod_postal_elminar)
-        # if datos.baja(id_ciudad_eliminar):
-        #     self.message['text'] = 'La ciudad {} fue eliminada'.format(ciudad_eliminar[1])
+        if datos.baja(ciudad_eliminar[0]):
+            self.message['text'] = 'La ciudad {} fue eliminada'.format(ciudad_eliminar[2])
+        self.mostrar_ciudades()
 
     def modificar_ciudad(self):
         seleccion = self.validar_seleccion()
-        self.ventana_CRUD('Modificar ciudad', seleccion)
+        if seleccion != ('', ''):
+            self.ventana_CRUD('Modificar ciudad', seleccion)
 
     def modificar_ciudad2(self, ciudad_modificar):
-        print('modificar', ciudad_modificar)
-        # cod_postal_modificar = ciudad_modificar[0]
-        # datos = DatosCiudades()
-        # id_ciudad_modificar = datos.buscar_x_id_ciudad(cod_postal_modificar)
-        # ciudad_modificacion = datos.buscar_x_id_ciudad(id_ciudad_modificar)
-        # if datos.modificacion(ciudad_modificacion) != False:
-        #     self.message['text'] = 'La ciudad {} fue agregada'.format(ciudad_modificar[1])
+        if datos.modificacion(ciudad_modificar[0],
+                              ciudad_modificar[1],
+                              ciudad_modificar[2]) != False:
+            self.message['text'] = 'La ciudad {} fue modificada'.format(ciudad_modificar[2])
+        self.mostrar_ciudades()
 
     def ventana_CRUD(self, text_title, seleccion):
+        self.message['text'] = ''
         wind_crud = tk.Toplevel()
         wind_crud.title = 'text_title'
         frame_crud = ttk.Frame(wind_crud)
         frame_crud.grid(row=0, column=0, columnspan=3, pady=20)
+        tk.Label(frame_crud, text=text_title).grid(row=0, column=1, columnspan=3)
         self.ciudad_tupla = ('', '')
+        cp_default = tk.StringVar(frame_crud, value=seleccion[1])
+        nombre_ciudad = tk.StringVar(frame_crud, value=seleccion[2])
 
         # Codigo Postal
-        tk.Label(frame_crud, text='Codigo Postal:').grid(row=0, column=1)
-        self.cp_nuevo = tk.Entry(frame_crud)  #,
-        self.cp_nuevo.grid(row=0, column=2)
-            # textvariable=tk.StringVar(wind_crud, value=seleccion[0])).\
+        tk.Label(frame_crud, text='Codigo Postal:').grid(row=1, column=1)
+        self.cp_nuevo = tk.Entry(frame_crud, textvariable=cp_default)
+        self.cp_nuevo.grid(row=1, column=2)
+        if text_title=='Eliminar ciudad':
+            self.cp_nuevo.configure(state='readonly')
 
         # Ciudad
-        tk.Label(frame_crud, text='Ciudad:').grid(row=1, column=1)
-        self.ciudad_nueva = tk.Entry(frame_crud)
-        self.ciudad_nueva.grid(row=1, column=2)
-            #textvariable=tk.StringVar(wind_crud, value=seleccion[1])).\
+        tk.Label(frame_crud, text='Ciudad:').grid(row=2, column=1)
+        self.ciudad_nueva = tk.Entry(frame_crud, textvariable=nombre_ciudad)
+        self.ciudad_nueva.grid(row=2, column=2)
+        if text_title=='Eliminar ciudad':
+            self.ciudad_nueva.configure(state='readonly')
 
         def retornar_tupla():
-            self.ciudad_tupla = (self.cp_nuevo.get(), self.ciudad_nueva.get())
+            self.ciudad_tupla = (seleccion[0], self.cp_nuevo.get(), self.ciudad_nueva.get())
             wind_crud.destroy()
             if text_title=='Modificar ciudad':
-                print('modificar')
                 self.modificar_ciudad2(self.ciudad_tupla)
             if text_title=='Eliminar ciudad':
                 self.eliminar_ciudad2(self.ciudad_tupla)
@@ -247,125 +252,8 @@ if __name__ == '__main__':
     ciudad3.nombre_ciudad = 'Ciudad Autonoma de Buenos Aires'
     datos.alta(ciudad3)
 
-    # ciudades = datos.todas()
-    # for ciudad in ciudades:
-    #         print(ciudad[1], '', ciudad[2])
-
     main_window = tk.Tk()
     app = Ciudades_CodPostales(main_window)
     main_window.mainloop()
 
-###########################
-
-# class Product:
-#     # connection dir property
-#     db_name = 'database.db'
-#
-#     def __init__(self, window):
-#         # Initializations
-#         self.wind = window
-#         self.wind.title('Products Application')
-#
-#         # Creating a Frame Container
-#         frame = LabelFrame(self.wind, text = 'Register new Product')
-#         frame.grid(row = 0, column = 0, columnspan = 3, pady = 20)
-#
-#         # Name Input
-#         Label(frame, text = 'Name: ').grid(row = 1, column = 0)
-#         self.name = Entry(frame)
-#         self.name.focus()
-#         self.name.grid(row = 1, column = 1)
-#
-#         # Price Input
-#         Label(frame, text = 'Price: ').grid(row = 2, column = 0)
-#         self.price = Entry(frame)
-#         self.price.grid(row = 2, column = 1)
-#
-#         # Button Add Product
-#         ttk.Button(frame, text = 'Save Product', command = self.add_product).grid(row = 3, columnspan = 2, sticky = W + E)
-#
-#         # Output Messages
-#         self.message = Label(text = '', fg = 'red')
-#         self.message.grid(row = 3, column = 0, columnspan = 2, sticky = W + E)
-#
-#         # Table
-#         self.tree = ttk.Treeview(height = 10, columns = 2)
-#         self.tree.grid(row = 4, column = 0, columnspan = 2)
-#         self.tree.heading('#0', text = 'Name', anchor = CENTER)
-#         self.tree.heading('#1', text = 'Price', anchor = CENTER)
-#
-#         # Buttons
-#         ttk.Button(text = 'DELETE', command = self.delete_product).grid(row = 5, column = 0, sticky = W + E)
-#         ttk.Button(text = 'EDIT', command = self.edit_product).grid(row = 5, column = 1, sticky = W + E)
-#
-#         # Filling the Rows
-#         self.get_products()
-#
-#     # User Input Validation
-#     def validation(self):
-#         return len(self.name.get()) != 0 and len(self.price.get()) != 0
-#
-#     def add_product(self):
-#         if self.validation():
-#             query = 'INSERT INTO product VALUES(NULL, ?, ?)'
-#             parameters =  (self.name.get(), self.price.get())
-#             self.run_query(query, parameters)
-#             self.message['text'] = 'Product {} added Successfully'.format(self.name.get())
-#             self.name.delete(0, END)
-#             self.price.delete(0, END)
-#         else:
-#             self.message['text'] = 'Name and Price is Required'
-#         self.get_products()
-#
-#     def delete_product(self):
-#         self.message['text'] = ''
-#         try:
-#            self.tree.item(self.tree.selection())['text'][0]
-#         except IndexError as e:
-#             self.message['text'] = 'Please select a Record'
-#             return
-#         self.message['text'] = ''
-#         name = self.tree.item(self.tree.selection())['text']
-#         query = 'DELETE FROM product WHERE name = ?'
-#         self.run_query(query, (name, ))
-#         self.message['text'] = 'Record {} deleted Successfully'.format(name)
-#         self.get_products()
-#
-#     def edit_product(self):
-#         self.message['text'] = ''
-#         try:
-#             self.tree.item(self.tree.selection())['values'][0]
-#         except IndexError as e:
-#             self.message['text'] = 'Please, select Record'
-#             return
-#         name = self.tree.item(self.tree.selection())['text']
-#         old_price = self.tree.item(self.tree.selection())['values'][0]
-#         self.edit_wind = Toplevel()
-#         self.edit_wind.title = 'Edit Product'
-#         # Old Name
-#         Label(self.edit_wind, text = 'Old Name:').grid(row = 0, column = 1)
-#         Entry(self.edit_wind, textvariable = StringVar(self.edit_wind, value = name), state = 'readonly').grid(row = 0, column = 2)
-#         # New Name
-#         Label(self.edit_wind, text = 'New Price:').grid(row = 1, column = 1)
-#         new_name = Entry(self.edit_wind)
-#         new_name.grid(row = 1, column = 2)
-#
-#         # Old Price
-#         Label(self.edit_wind, text = 'Old Price:').grid(row = 2, column = 1)
-#         Entry(self.edit_wind, textvariable = StringVar(self.edit_wind, value = old_price), state = 'readonly').grid(row = 2, column = 2)
-#         # New Price
-#         Label(self.edit_wind, text = 'New Name:').grid(row = 3, column = 1)
-#         new_price= Entry(self.edit_wind)
-#         new_price.grid(row = 3, column = 2)
-#
-#         Button(self.edit_wind, text = 'Update', command = lambda: self.edit_records(new_name.get(), name, new_price.get(), old_price)).grid(row = 4, column = 2, sticky = W)
-#         self.edit_wind.mainloop()
-#
-#     def edit_records(self, new_name, name, new_price, old_price):
-#         query = 'UPDATE product SET name = ?, price = ? WHERE name = ? AND price = ?'
-#         parameters = (new_name, new_price,name, old_price)
-#         self.run_query(query, parameters)
-#         self.edit_wind.destroy()
-#         self.message['text'] = 'Record {} updated successfylly'.format(name)
-#         self.get_products()
 
