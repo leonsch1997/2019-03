@@ -7,7 +7,7 @@ from practico_05.ejercicio_02 import DatosSocio
 class DniRepetido(Exception):
     def dni_repe(self,dniingresado):
         for t in Socio.dni:
-            if t.dni == DatosSocio.buscar_dni(dniingresado):
+            if t.dni == NegocioSocio.buscar_dni(dniingresado):
                 print("ya existe una persona con ese dni")
             else:
                 print("dni valido")
@@ -58,8 +58,8 @@ class NegocioSocio(object):
         Devuelve la instancia del socio, dado su id.
         Devuelve None si no encuentra nada.
         :rtype: Socio
-        """
-        return
+        """     
+        return DatosSocio.buscar(id_socio)
 
     def buscar_dni(self, dni_socio):
         """
@@ -67,14 +67,15 @@ class NegocioSocio(object):
         Devuelve None si no encuentra nada.
         :rtype: Socio
         """
-        return
+        return DatosSocio.buscar_dni(dni_socio)
 
     def todos(self):
         """
         Devuelve listado de todos los socios.
         :rtype: list
         """
-        return []
+        return DatosSocio.todos()
+
 
     def alta(self, socio):
         """
@@ -93,7 +94,7 @@ class NegocioSocio(object):
         Devuelve True si el borrado fue exitoso.
         :rtype: bool
         """
-        return False
+        return DatosSocio.baja(id_socio)
 
     def modificacion(self, socio):
         """
