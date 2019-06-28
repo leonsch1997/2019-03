@@ -5,15 +5,43 @@ from practico_05.ejercicio_02 import DatosSocio
 
 
 class DniRepetido(Exception):
-    pass
+    def dni_repe(self,dniingresado):
+        for t in Socio.dni:
+            if t.dni == DatosSocio.buscar_dni(dniingresado):
+                print("ya existe una persona con ese dni")
+            else:
+                print("dni valido")
 
 
 class LongitudInvalida(Exception):
-    pass
+    def long_invalid(self,nom,ape,carac_min,carac_max):
+        if len(nom)<= carac_min:
+            print("nombre ingresado muy corto")
+            return True
+        if len(nom)>= carac_max:
+            print("nombre ingresado muy largo")
+            return True
+        if len(ape)<= carac_min:
+            print("apellido ingresado muy corto")
+            return True
+        if len(ape)>= carac_max:
+            print("apellido ingresado muy largo")
+            return True
+        if len(nom)>carac_min and len(ape)>carac_min and len(nom)<carac_max and len(ape)<carac_max:
+            return False
 
 
 class MaximoAlcanzado(Exception):
-    pass
+    def maxi(self,maximo):
+        cont=0
+        for t in Socio.id_socio:
+            cont+=1
+        if cont<=maximo:
+            print("todo bien")
+            return False
+        else:
+            print("supero el maximo")
+            return True
 
 
 class NegocioSocio(object):
@@ -85,8 +113,16 @@ class NegocioSocio(object):
         :raise: DniRepetido
         :return: bool
         """
-        return False
-
+        
+        try:
+            if DatosSocio.buscar(socio.id_socio) == socio.id_socio:
+                  if DniRepetido.dni_repe(socio.id_socio):
+                      return True
+                  else:
+                    return False
+        except(ValueError):
+            print("no existe ese socio")
+            
     def regla_2(self, socio):
         """
         Validar que el nombre y el apellido del socio cuenten con mas de 3 caracteres pero menos de 15.
@@ -94,7 +130,15 @@ class NegocioSocio(object):
         :raise: LongitudInvalida
         :return: bool
         """
-        return False
+        try:
+            if DatosSocio.buscar(socio.id_socio) == socio.id_socio:
+                  if LongitudInvalida.long_invalid(socio.nombre,socio.apellido,self.MIN_CARACTERES,self.MAX_CARACTERES):
+                      return True
+                  else:
+                      return False
+        except(ValueError):
+            print("no existe ese socio")
+
 
     def regla_3(self):
         """
@@ -102,4 +146,8 @@ class NegocioSocio(object):
         :raise: MaximoAlcanzado
         :return: bool
         """
-        return False
+        if MaximoAlcanzado.maxi(NegocioSocio.MAX_SOCIOS):
+            return True
+        else:
+            return False
+
