@@ -86,7 +86,17 @@ class NegocioSocio(object):
         :type socio: Socio
         :rtype: bool
         """
-        return False
+        nuevosocio=DatosSocio.alta(socio)
+        if self.regla_1(nuevosocio):
+            if self.regla_2(nuevosocio):
+                if self.regla_3():
+                    return True #alta realizada con exito
+                else:
+                    MaximoAlcanzado.maxi(NegocioSocio.MAX_SOCIOS)
+            else:
+                LongitudInvalida.long_invalid(nuevosocio.nombre,nuevosocio.apellido,NegocioSocio.MIN_CARACTERES,NegocioSocio.MAX_CARACTERES)
+        else:
+            DniRepetido.dni_repe(nuevosocio.dni)
 
     def baja(self, id_socio):
         """
@@ -105,7 +115,12 @@ class NegocioSocio(object):
         :type socio: Socio
         :rtype: bool
         """
-        return False
+        sociomodificado=DatosSocio.modificacion(socio)
+        if self.regla_2(sociomodificado):
+            return True   #Modificacion exitosa!!
+        else:
+            LongitudInvalida.long_invalid(sociomodificado.nombre,sociomodificado.apellido,NegocioSocio.MIN_CARACTERES,NegocioSocio.MAX_CARACTERES)
+
 
     def regla_1(self, socio):
         """
