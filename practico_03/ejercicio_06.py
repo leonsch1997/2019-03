@@ -42,3 +42,4 @@ def reset_tabla(func):
         borrar_tabla_peso()
         borrar_tabla()
     return func_wrapper
+
