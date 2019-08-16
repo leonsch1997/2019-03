@@ -3,12 +3,20 @@
 
 import datetime
 
-from practico_03.ejercicio_01 import reset_tabla
+from practico_03.ejercicio_01 import reset_tabla, crear_conexion
 
 
 def agregar_persona(nombre, nacimiento, dni, altura):
-    return 0
+    cSQL = 'INSERT into Persona (Nombre, FechaNacimiento, Dni, Altura) VALUES(?, ?, ?, ?)'
+    datos = (nombre,nacimiento,dni,altura)
 
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        cursor.execute(cSQL, datos)
+        IdPersona = cursor.lastrowid
+        db.commit()
+
+    return IdPersona
 
 @reset_tabla
 def pruebas():
@@ -19,3 +27,4 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
+
