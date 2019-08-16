@@ -15,14 +15,30 @@
 # - False en caso de no cumplir con alguna validacion.
 
 import datetime
-
+from practico_03.ejercicio_01 import reset_tabla, crear_conexion
 from practico_03.ejercicio_02 import agregar_persona
+from practico_03.ejercicio_04 import buscar_persona
 from practico_03.ejercicio_06 import reset_tabla
 from practico_03.ejercicio_07 import agregar_peso
 
 
 def listar_pesos(id_persona):
-    return []
+    exists = buscar_persona(id_persona)
+    cSQL = """SELECT SUBSTR(fecha, 1,10), peso 
+               FROM PersonaPeso 
+               WHERE idPersona = ?"""
+    datos = (id_persona,)
+
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        if exists:
+            pesos = cursor.execute(cSQL, datos).fetchall()
+            if pesos is None:
+                return False
+            else:
+                return pesos
+        else:
+            return False
 
 
 @reset_tabla
@@ -42,3 +58,4 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
+
