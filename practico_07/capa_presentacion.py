@@ -69,10 +69,16 @@ class Socios_CP(tk.Frame):
         self.ventana_CRUD('Agregar Socio', socio_nuevo)
 
     def agregar_socio2(self, socio_agregar):
-        datos = NegocioSocio()
-        if datos.alta(socio_agregar):
-            self.message['text'] = 'El socio {0}, {1} fue agregado'.format(socio_agregar.apellido, socio_agregar.nombre)
-        self.mostrar_socios()
+        try:
+            datos = NegocioSocio()
+            if datos.alta(socio_agregar):
+                self.message['text'] = 'El socio {0}, {1} fue agregado'.format(socio_agregar.apellido,
+                                                                               socio_agregar.nombre)
+            self.mostrar_socios()
+        except Exception as e:
+            self.message['text'] = 'El socio {0}, {1} NO fue agregado. {2}'.format(socio_agregar.apellido,
+                                                                                   socio_agregar.nombre,
+                                                                                   str(e))
 
     def eliminar_socio(self):
         socio_seleccionado = self.validar_seleccion()
@@ -91,10 +97,15 @@ class Socios_CP(tk.Frame):
             self.ventana_CRUD('Modificar Socio', socio_seleccionado)
 
     def modificar_socio2(self, socio_modificar):
-        datos = NegocioSocio()
-        if datos.modificacion(socio_modificar) != False:
-            self.message['text'] = 'El socio {0}, {1} fue modificado'.format(socio_modificar.apellido, socio_modificar.nombre)
-        self.mostrar_socios()
+        try:
+            datos = NegocioSocio()
+            if datos.modificacion(socio_modificar) == True:
+                self.message['text'] = 'El socio {0}, {1} fue modificado'.format(socio_modificar.apellido, socio_modificar.nombre)
+            self.mostrar_socios()
+        except Exception as e:
+            self.message['text'] = 'El socio {0}, {1} NO fue modificado. {2}'.format(socio_modificar.apellido,
+                                                                                   socio_modificar.nombre,
+                                                                                   str(e))
 
     def ventana_CRUD(self, text_title, socio_seleccionado):
         self.message['text'] = ''
