@@ -9,12 +9,49 @@
 
 import datetime
 
+from practico_03.ejercicio_01 import reset_tabla, crear_conexion
 from practico_03.ejercicio_02 import agregar_persona
+from practico_03.ejercicio_04 import buscar_persona
 from practico_03.ejercicio_06 import reset_tabla
+
+def fecha_ultimo_peso(id_persona):
+
+    cSQL = """SELECT MAX(PersonaPeso.fecha)
+              FROM Persona
+              JOIN PersonaPeso
+              ON PersonaPeso.idPersona = Persona.idPersona
+              WHERE Persona.idPersona = ?;"""
+    datos = (id_persona,)
+
+    with crear_conexion() as db:
+        cursor = db.cursor()
+        ultima_fecha = cursor.execute(cSQL, datos).fetchone()[0]
+
+        if ultima_fecha is None:
+            return None
+        else:
+            return ultima_fecha
 
 
 def agregar_peso(id_persona, fecha, peso):
-    pass
+
+    cSQL = """INSERT into PersonaPeso (idPersona, fecha, peso) VALUES(?, ?, ?)"""
+    datos = (id_persona, fecha, peso)
+    ultima_fecha = fecha_ultimo_peso(id_persona)
+    exists = buscar_persona(id_persona)
+
+    with crear_conexion() as db:
+        cursor = db.cursor()
+
+        if exists is False:
+            return False
+        elif not(ultima_fecha is None) \
+        and fecha < datetime.datetime.strptime(ultima_fecha, '%Y-%m-%d %H:%M:%S'):
+            return False
+        else:
+            cursor.execute(cSQL, datos)
+            id_peso = cursor.lastrowid
+            return id_peso
 
 
 @reset_tabla
@@ -28,3 +65,5 @@ def pruebas():
 
 if __name__ == '__main__':
     pruebas()
+
+
