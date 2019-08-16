@@ -43,7 +43,7 @@ class DatosSocio(object):
         :rtype: Socio
         """
         try:
-            socio = self.session.query(Socio).filter(Socio.dni==dni_socio).first()
+            socio = self.session.query(Socio).filter(Socio.dni == dni_socio).first()
             return socio
         except:
             return None
@@ -64,6 +64,7 @@ class DatosSocio(object):
         """
         try:
             self.session.query(Socio).delete()
+            self.session.commit()
             return True
 
         except:
@@ -86,8 +87,12 @@ class DatosSocio(object):
         :rtype: bool
         """
         socio = self.buscar(id_socio)
-        self.session.delete(socio)
-        return True
+        if (socio is None):
+            return False
+        else:
+            self.session.delete(socio)
+            self.session.commit()
+            return True
 
     def modificacion(self, socio):
         """
